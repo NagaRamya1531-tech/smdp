@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+        background-color: #6b89a7;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-container h1 {
+        margin-bottom: 20px;
+        font-size: 28px;
+        text-align: center;
+    }
+
+    .form-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .form-container label {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .form-container input[type="date"],
+    .form-container select {
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 16px;
+        width: 200px;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .form-container button {
+        padding: 12px 25px;
+        background-color: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .form-container button:hover {
+        background-color: #004d99;
+        transform: scale(1.05);
+    }
+    .data-summary {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 18px;
+        line-height: 1.5;
+        color: #f0f0f0;
+    }
+</style>
+
+<div class="form-container">
+    <h1>{{ title }}</h1>
+
+    <form method="get" action="{{ request.path }}">
+        <!-- Date Filter Section -->
+        {% if show_date_filter %}
+        <div class="form-section">
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+            
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+        </div>
+        {% endif %}
+
+        <!-- Platform Filter Section -->
+        {% if show_platform_filter %}
+        <div class="form-section">
+            <label for="platform">Platform:</label>
+            <select id="platform" name="platform">
+                <option value="all" {% if platform == 'all' %}selected{% endif %}>All</option>
+                <option value="reddit" {% if platform == 'reddit' %}selected{% endif %}>Reddit</option>
+                <option value="chan" {% if platform == 'chan' %}selected{% endif %}>4chan</option>
+            </select>
+        </div>
+        {% endif %}
+        {% if function_name in ["subreddit_comments", "daily_submissions", "hourly_comments", "sentiment_reddit", "hatespeech_reddit"] %}
+        <div class="form-section">
+            <label for="subreddit">Subreddit:</label>
+            <select id="subreddit" name="subreddit">
+                <option value="all" {% if subreddit == "all" %}selected{% endif %}>All Subreddits</option>
+                {% for sub in subreddits %}
+                <option value="{{ sub }}" {% if subreddit == sub %}selected{% endif %}>{{ sub }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+        
+
+
+        <!-- Apply Button Centered -->
+        {% if function_name == "top_subreddits" %}
+        <div class="button-container">
+          
+        </div>
+        {% endif %}
+        {% if function_name not  in ["top_subreddits"] %}
+        <div class="button-container">
+            <button type="submit">Apply</button>
+        </div>
+            {% endif %}
+        
+        <img src="data:image/png;base64,{{ image }}" alt="{{ title }}" class="img-fluid" style="border-radius: 10px;">
+        
+        <div class="data-summary">
+            <!-- For Data Count Function -->
+            {% if function_name == "data_count" %}
+                <p><strong>Total Data Count:</strong> {{ total_count }}</p>
+                <p><strong>Data Range Selected:</strong> {{ start_date }} to {{ end_date }}</p>
+                <p><strong>Platform Selected:</strong> {{ platform|capitalize }}</p>
+            {% endif %}
+        
+            <!-- For Daily Comments or Platform Comparison -->
+            {% if function_name == "daily_comments" or function_name == "platform_comparison" or function_name=="time_series_toxicity" %}
+                <p><strong>Data Range Selected:</strong> {{ start_date }} to {{ end_date }}</p>
+                <p><strong>Platform Selected:</strong> {{ platform|capitalize }}</p>
+            {% endif %}
+        
+            <!-- For Subreddit and Hourly Functions -->
+            {% if function_name in ["subreddit_comments", "hourly_comments", "daily_submissions",
+                                    "hatespeech_4chan", "sentiment_4chan",
+                                    "hatespeech_reddit", "sentiment_reddit",
+                                    "sentiment_politics", "hatespeech_politics","sentiment-comparison","hatespeech-comparison"] %}
+                <p><strong>Data Range Selected:</strong> {{ start_date }} to {{ end_date }}</p>
+            
+            {% endif %}
+            {% if function_name == "subreddit_comments" or function_name=="daily_submissions" or  function_name=="hourly_comments"  or function_name=="sentiment_reddit" or function_name=="hatespeech_reddit" %}
+            <p><strong>Selected Subreddit:</strong> {{ subreddit }}</p>
+            {% endif %}
+        </div>
+        {% if function_name == "hatespeech-comparison" %}
+        <div>
+            <h3>Data Summary:</h3>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Platform</th>
+                        <th>Hate Speech (True)</th>
+                        <th>Hate Speech (False)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Reddit</td>
+                        <td>{{ data_summary['Reddit']['True'] }}</td>
+                        <td>{{ data_summary['Reddit']['False'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>4chan</td>
+                        <td>{{ data_summary['4chan']['True'] }}</td>
+                        <td>{{ data_summary['4chan']['False'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        {% endif %}
+        
+        
+    </form>
+</div>
+{% endblock %}

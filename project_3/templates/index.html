@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analysis on Social Media Toxicity</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('static/images/image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fdcb52;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        ul li {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #00acee;
+            font-size: 1.2rem;
+            padding: 10px 15px;
+            border: 1px solid #00acee;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        a:hover {
+            background-color: #00acee;
+            color: white;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #ff4757;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #7bed9f;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #progress {
+            margin-top: 20px;
+            text-align: center;
+            color: #fdcb52;
+        }
+
+        button {
+            background-color: #00acee;
+            color: white;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #007bb5;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Data Analysis on Social Media Toxicity</h1>
+    </header>
+    <div class="container">
+        <!-- Add Start Processing Section -->
+        <div class="section">
+            <h2>Processing Comments</h2>
+            <button onclick="startProcessing()">Start Processing</button>
+            <div id="progress">
+                <p>Reddit: <span id="reddit-progress">0/0</span> comments processed</p>
+                <p>4chan: <span id="chan-progress">0/0</span> comments processed</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>General Toxicity Insights</h2>
+            <ul>
+                <li><a href="/time-series-toxicity">Time Series of Toxicity Scores</a></li>
+                <li><a href="/platform-comparison-toxicity">Platform Comparison of Toxicity</a></li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Visualization Categories</h2>
+            <ul>
+                <li><a href="/data-count">Data Count</a></li>
+                <li><a href="/daily-comments">Daily Comments</a></li>
+                <li><a href="/subreddit-comments">Subreddit Comments</a></li>
+                <li><a href="/daily-submissions">Daily Submissions</a></li>
+                <li><a href="/hourly-comments">Hourly Comments</a></li>
+                <li><a href="/top-subreddits">Top Subreddits by Comments</a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Sentiment Analysis</h2>
+            <ul>
+                <li><a href="/sentiment-reddit">Reddit Sentiment Analysis</a></li>
+                <li><a href="/sentiment-4chan">4chan Sentiment Analysis</a></li>
+                <li><a href="/sentiment-reddit">Subreddit Sentiment Analysis</a></li>
+                <li><a href="/sentiment-comparison">Comparison of Sentiment Analysis</a></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Hate Speech Analysis</h2>
+            <ul>
+                <li><a href="/hatespeech-reddit">Reddit Hate Speech Analysis</a></li>
+                <li><a href="/hatespeech-4chan">4chan Hate Speech Analysis</a></li>
+                <li><a href="/hatespeech-reddit">Subreddit Hate Speech Analysis</a></li>
+                <li><a href="/hatespeech-comparison">Comparison of Hate Speech Analysis</a></li>
+            </ul>
+        </div>
+    </div>
+    <footer>
+        &copy; 2024 Visualization Dashboard | All Rights Reserved
+    </footer>
+
+    <script>
+        function startProcessing() {
+            fetch('/start-processing')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.message === "Processing started") {
+                        monitorProgress();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function monitorProgress() {
+            fetch('/progress-status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("status").innerText = data.status;
+
+                    // Update Reddit progress
+                    const redditProcessed = data.reddit_processed;
+                    const redditTotal = data.reddit_total;
+                    const redditLeft = redditTotal - redditProcessed;
+                    document.getElementById("reddit-progress").innerText = `${redditProcessed}/${redditTotal}`;
+                    document.getElementById("reddit-left").innerText = redditLeft;
+
+                    // Update 4chan progress
+                    const chanProcessed = data.chan_processed;
+                    const chanTotal = data.chan_total;
+                    const chanLeft = chanTotal - chanProcessed;
+                    document.getElementById("chan-progress").innerText = `${chanProcessed}/${chanTotal}`;
+                    document.getElementById("chan-left").innerText = chanLeft;
+
+                    // Continue polling if still processing
+                    if (data.status === "processing") {
+                        setTimeout(monitorProgress, 2000); // Poll every 2 seconds
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

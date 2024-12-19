@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: url('https://unsplash.com/photos/blue-red-and-green-letters-illustration-mr4JG4SYOF8') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            color: white !important;
+        }
+
+        .content {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        h1, h2 {
+            color: #fdcb52;
+        }
+        .go-back-button {
+    text-decoration: none;
+    color: white;
+    background-color: #007bb5;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 2px solid #007bb5;
+    transition: all 0.3s ease;
+}
+
+.go-back-button:hover {
+    background-color: #00acee;
+    border-color: #00acee;
+    color: white;
+}
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="/">Social Media Toxicity Analysis</a>
+    </nav>
+    <div class="content">
+        <!-- Project Explanation Section -->
+        <div class="intro-section">
+            <h1>Welcome to the Social Media Toxicity Analysis Dashboard</h1>
+            <p>
+                This dashboard is designed to analyze online discussions on immigration and refugees across social media platforms like Reddit and 4chan. 
+                Using advanced natural language processing techniques and real-time data collection, we measure toxicity, analyze sentiment, and identify patterns in public discourse. 
+                The goal is to provide insights into how sensitive topics like immigration are discussed online, empowering researchers and policymakers to address harmful narratives and foster constructive dialogue.
+            </p>
+            <p>
+                With our interactive tools, you can explore temporal trends, compare toxicity levels across platforms, and delve into the linguistic features of toxic and non-toxic content. Use the visualizations below to uncover insights about public sentiment and the impact of online conversations.
+            </p>
+        </div>
+    <div class="container">
+        
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/" class="go-back-button">Go Back to Home</a>
+    </div>
+
+    <footer>
+        &copy; 2024 Social Media Toxicity Analysis | All Rights Reserved
+    </footer>
+   
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

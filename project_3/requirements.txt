@@ -1,0 +1,10 @@
+###### Requirements with Version Specifiers ######
+pyfaktory
+python-dotenv ~= 1.0
+# faktory ~= 1.0
+requests ~= 2.32
+psycopg2-binary ~= 2.9
+pandas
+matplotlib
+mpld3
+flask
