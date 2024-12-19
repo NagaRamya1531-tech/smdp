@@ -1,6 +1,4 @@
-Here's a more detailed and clear README for your project:
 
-```markdown
 # Data Collection System for Reddit and 4chan
 
 ## Overview
